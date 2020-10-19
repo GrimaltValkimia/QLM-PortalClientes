@@ -1,0 +1,47 @@
+20181128.194338
+P00023
+P00023
+ DROP TABLE `ServicioSolicitud` 
+P00023
+ DROP TABLE `ClienteBloqueadoTmp` 
+ CREATE TABLE `ServicioSolicitud` (`ServicioSolicitudId`  bigint NOT NULL  AUTO_INCREMENT,   `ServicioSolicitudOrigen`  char(100) NOT NULL , `ServicioSolicitudOrigenId`  varchar(60)   NOT NULL , `ServicioSolicitudDato`  MEDIUMTEXT NOT NULL , `ServicioSolicitudFecha`    datetime NOT NULL , `ServicioSolicitudEstadoFecha`  datetime NOT NULL , `ServicioSolicitudEstado`    char(3) NOT NULL , `ServicioSolicitudOk`  BOOL NOT NULL , `ServicioSolicitudErrores`    TEXT NOT NULL , `ServicioSolicitudResultado`  TEXT NOT NULL , `ServicioSolicitudPaisCodigo`    smallint NOT NULL , PRIMARY KEY(`ServicioSolicitudId`))  ENGINE=InnoDB 
+ DROP TABLE `ClienteAdjunto` 
+ CREATE TABLE `ClienteBloqueadoTmp` (`CliBloqTmpWorkStation`  char(60) NOT NULL ,   `CliBloqTmpPaisCodigo`  smallint NOT NULL , `CliBloqTmpClienteId`  bigint NOT NULL   , `CliBloqTmpClienteNombre`  char(60) NOT NULL , `CliBloqTmpFechaAlta`  datetime   NOT NULL , `CliBloqTmpUsuarioAlta`  char(20) NOT NULL , `CliBloqTmpPBaCId`  bigint   NOT NULL , `CliBLoqTmpBloqueoTruck`  char(1) NOT NULL , PRIMARY KEY(`CliBloqTmpWorkStation`,   `CliBloqTmpPaisCodigo`, `CliBloqTmpClienteId`))  ENGINE=InnoDB 
+ CREATE INDEX `USERVICIOSOLICITUDIDEXTERNO` ON `ServicioSolicitud` (`ServicioSolicitudPaisCodigo`   ,`ServicioSolicitudOrigen` ,`ServicioSolicitudOrigenId` ) 
+ CREATE TABLE `ClienteAdjunto` (`ClienteAdjuntoEmpId`  smallint NOT NULL , `ClienteAdjuntoCliId`    mediumint NOT NULL , `ClienteAdjuntoTipo`  smallint NOT NULL , `ClienteAdjuntoVersion`    smallint NOT NULL , `ClienteAdjuntoSolicitudOrigen`  int NOT NULL , `ClienteAdjuntoArchivo`    LONGBLOB NOT NULL , `ClienteAdjuntoNombre`  char(80) NOT NULL , `ClienteAdjuntoExtension`    char(5) NOT NULL , `ClienteAdjuntoAltaUsuario`  char(20) NOT NULL , `ClienteAdjuntoAltaFecha`    datetime NOT NULL , `ClienteAdjuntoRevisionUsuario`  char(20) NOT NULL , `ClienteAdjuntoRevisionFecha`    datetime NOT NULL , `ClienteAdjuntoVigente`  char(1) NOT NULL , PRIMARY KEY(`ClienteAdjuntoEmpId`,   `ClienteAdjuntoCliId`, `ClienteAdjuntoTipo`, `ClienteAdjuntoVersion`))  ENGINE=InnoDB   
+ CREATE INDEX `USERVICIOSOLICITUDESTADO` ON `ServicioSolicitud` (`ServicioSolicitudPaisCodigo`   ,`ServicioSolicitudEstado` ) 
+ CREATE INDEX `UCLIENTEADJUNTO` ON `ClienteAdjunto` (`ClienteAdjuntoEmpId` ,`ClienteAdjuntoCliId`   ,`ClienteAdjuntoVigente` ) 
+ CREATE INDEX `USERVICIOSOLICITUDPAISID` ON `ServicioSolicitud` (`ServicioSolicitudPaisCodigo`   ,`ServicioSolicitudId` ) 
+P00023
+P00023
+ DROP TABLE `LogProcesoActiva` 
+P00023
+ CREATE TABLE `LogProcesoActiva` (`LogProcesoActivaNombre`  char(60) NOT NULL , `LogProcesoActivaDescripcion`    char(255) NOT NULL , `LogProcesoActivaActivo`  char(1) NOT NULL , `LogProcesoActivaUltimoCambio`    datetime NOT NULL , PRIMARY KEY(`LogProcesoActivaNombre`))  ENGINE=InnoDB 
+P00023
+P00023
+ DROP TABLE `SubRegionAlcohol` 
+ DROP TABLE `Equivalencia` 
+ CREATE TABLE `SubRegionAlcohol` (`EmpId`  smallint NOT NULL , `SubRegionId`  smallint   NOT NULL , `SubRegionAlcoholObligatorio`  char(1) NOT NULL , PRIMARY KEY(`EmpId`,   `SubRegionId`))  ENGINE=InnoDB 
+ CREATE TABLE `Equivalencia` (`EquivalenciaId`  int NOT NULL  AUTO_INCREMENT, `EmpId`    smallint NOT NULL , `EquivalenciaAmbito`  char(3) NOT NULL , `EquivalenciaOrigen`    char(80) NOT NULL , `EquivalenciaRemplazo`  char(45) NOT NULL , PRIMARY KEY(`EquivalenciaId`))    ENGINE=InnoDB 
+ CREATE UNIQUE INDEX `UEQUIVALENCIAUNIQUE` ON `Equivalencia` (`EmpId` ,`EquivalenciaAmbito`   ,`EquivalenciaOrigen` ) 
+P00023
+ DROP TABLE `LogProceso` 
+ CREATE TABLE `LogProceso` (`LogId`  bigint NOT NULL  AUTO_INCREMENT, `LogFecha`    datetime NOT NULL , `LogProceso`  char(128) NOT NULL , `LogTipo`  char(1) NOT NULL   , `LogTexto`  varchar(256) NOT NULL , `LogContexto`  varchar(2048) NOT NULL , PRIMARY   KEY(`LogId`))  ENGINE=InnoDB 
+ CREATE INDEX `ULOGPROCESOWW` ON `LogProceso` (`LogFecha` ,`LogProceso` ) 
+P00023
+ DROP TABLE `BandejaAutorizacion` 
+ CREATE TABLE `BandejaAutorizacion` (`IdAprobacion`  bigint NOT NULL , `BandejaAutFchRegistro`    datetime NOT NULL , `BaCTrnNro`  int NOT NULL , `BandejaAutTpoMovim`  char(2) NOT   NULL , `BandejaAutNroTicket`  bigint NOT NULL , `BandejaAutRolAutoriz`  varchar(60)   NOT NULL , `BandejaAutUserAccion`  varchar(60) , `BandejaAutFchAccion`  datetime   , `BandejaAutAccion`  char(1) , PRIMARY KEY(`IdAprobacion`))  ENGINE=InnoDB 
+P00023
+ DROP TABLE `UserRegion` 
+ CREATE TABLE `UserRegion` (`UserGUID`  char(40) NOT NULL , `EmpId`  smallint NOT   NULL , `RegId`  smallint NOT NULL , `UserNick`  char(30) NOT NULL , `UserApyNom`    char(100) NOT NULL , PRIMARY KEY(`UserGUID`, `EmpId`, `RegId`))  ENGINE=InnoDB 
+ CREATE INDEX `IUSERREGION1` ON `UserRegion` (`EmpId` ,`RegId` ) 
+P00023
+ DROP TABLE `Auditoria` 
+ CREATE TABLE `Auditoria` (`AuditoriaId`  bigint NOT NULL  AUTO_INCREMENT, `AuditoriaEntidad`    char(60) NOT NULL , `AuditoriaPK`  char(60) NOT NULL , `AuditoriaAccion`  char(3)   NOT NULL , `AuditoriaUsuarioGUID`  char(40) NOT NULL , `AuditoriaUsuarioName`  char(30)   NOT NULL , `AuditoriaFecha`  datetime NOT NULL , `AuditoriaDetalle`  varchar(500)   NOT NULL , PRIMARY KEY(`AuditoriaId`))  ENGINE=InnoDB 
+P00023
+P00023
+P00023
+P00023
+ DROP TABLE `CodigosAdicionales` 
+P00023
+ CREATE TABLE `CodigosAdicionales` (`IdCodigo`  int NOT NULL , `CodAdicionalAbv`    char(45) NOT NULL , `CodAdicionalTxt`  varchar(100) NOT NULL , `CodAdicionalGpoInfo`    smallint NOT NULL , `CodAdicionalEstado`  char(1) NOT NULL , PRIMARY KEY(`IdCodigo`,   `CodAdicionalAbv`))  ENGINE=InnoDB 

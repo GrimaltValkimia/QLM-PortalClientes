@@ -1,0 +1,193 @@
+CREATE TABLE `PerfilImpositivoConfigJurisdic` (`PICID`  bigint NOT NULL , `PICJurisdiccionId`  smallint NOT NULL , PRIMARY KEY(`PICID`, `PICJurisdiccionId`))  ENGINE=InnoDB
+CREATE INDEX `IPERFILIMPOSITIVOCONFIGURACIO6` ON `PerfilImpositivoConfigJurisdic` (`PICJurisdiccionId` )
+
+CREATE TABLE `PerfilImpositivoConfig` (`PICID`  bigint NOT NULL  AUTO_INCREMENT, `PaisCodigo`  smallint NOT NULL , `AFIPTiposIVACodigo`  smallint , `PICTipoIIBB`  char(1) , `PICPerfilImpVTAId`  smallint NOT NULL , `PICPerfilImpMDId`  smallint , `PICPerfilImpMDValida`  BOOL NOT NULL , `PICTipoDocId`  smallint NOT NULL , `PICValidacionTipo`  char(2) NOT NULL , `PICTodasProvincias`  BOOL NOT NULL , `PICActivo`  BOOL NOT NULL , `PICAdjuntoReq1`  smallint , `PICAdjuntoReq2`  smallint , `PICAdjuntoReq3`  smallint , PRIMARY KEY(`PICID`))  ENGINE=InnoDB
+CREATE UNIQUE INDEX `UPERFILIMPCONFIGUNIQUE` ON `PerfilImpositivoConfig` (`PaisCodigo` ,`AFIPTiposIVACodigo` ,`PICTipoIIBB` ,`PICPerfilImpVTAId` ,`PICPerfilImpMDId` ,`PICTipoDocId` )
+CREATE INDEX `IPERFILIMPOSITIVOCONFIGURACIO2` ON `PerfilImpositivoConfig` (`PICPerfilImpVTAId` )
+CREATE INDEX `IPERFILIMPOSITIVOCONFIGURACIO3` ON `PerfilImpositivoConfig` (`PICPerfilImpMDId` )
+CREATE INDEX `IPERFILIMPOSITIVOCONFIGURACIO4` ON `PerfilImpositivoConfig` (`PICTipoDocId` )
+CREATE INDEX `UPERFILIMPCONFIGBUSQUEDA` ON `PerfilImpositivoConfig` (`PaisCodigo` ,`PICTipoDocId` ,`PICActivo` ,`PICTodasProvincias` ,`AFIPTiposIVACodigo` ,`PICTipoIIBB` )
+
+CREATE TABLE `ComportamientoRol` (`PaisCodigo`  smallint NOT NULL , `AplicacionId`  bigint NOT NULL , `RolId`  bigint NOT NULL , `RolHabilitaAltaFueraDirecta`  BOOL NOT NULL , `RolHabilitaTerrFueraSubRegion`  BOOL NOT NULL , `RolHabilitaCodAdicionales`  BOOL NOT NULL , PRIMARY KEY(`PaisCodigo`, `AplicacionId`, `RolId`))  ENGINE=InnoDB
+
+CREATE TABLE `ServicioSolicitud` (`ServicioSolicitudId`  bigint NOT NULL  AUTO_INCREMENT, `ServicioSolicitudOrigen`  char(100) NOT NULL , `ServicioSolicitudOrigenId`  varchar(60) NOT NULL , `ServicioSolicitudDato`  MEDIUMTEXT NOT NULL , `ServicioSolicitudFecha`  datetime NOT NULL , `ServicioSolicitudEstadoFecha`  datetime NOT NULL , `ServicioSolicitudEstado`  char(3) NOT NULL , `ServicioSolicitudOk`  BOOL NOT NULL , `ServicioSolicitudErrores`  TEXT NOT NULL , `ServicioSolicitudResultado`  TEXT NOT NULL , `ServicioSolicitudPaisCodigo`  smallint NOT NULL , PRIMARY KEY(`ServicioSolicitudId`))  ENGINE=InnoDB
+CREATE INDEX `USERVICIOSOLICITUDIDEXTERNO` ON `ServicioSolicitud` (`ServicioSolicitudPaisCodigo` ,`ServicioSolicitudOrigen` ,`ServicioSolicitudOrigenId` )
+CREATE INDEX `USERVICIOSOLICITUDESTADO` ON `ServicioSolicitud` (`ServicioSolicitudPaisCodigo` ,`ServicioSolicitudEstado` )
+CREATE INDEX `USERVICIOSOLICITUDPAISID` ON `ServicioSolicitud` (`ServicioSolicitudPaisCodigo` ,`ServicioSolicitudId` )
+
+CREATE TABLE `ClienteSolicitudCodAdicional` (`PBaCID`  bigint NOT NULL , `CliSolCodAdjTpocodId`  char(15) NOT NULL , `CliSolCodAdjTpoCodAdd`  char(15) NOT NULL , `CliSolCodAdjValorCaracter`  char(45) NOT NULL , `CliSolCodAdjValorNumerico`  NUMERIC(17,5) NOT NULL , `CliSolCodAdjValorFecha`  date NOT NULL , `CliSolCodAdjAccion`  char(1) NOT NULL , PRIMARY KEY(`PBaCID`, `CliSolCodAdjTpocodId`, `CliSolCodAdjTpoCodAdd`))  ENGINE=InnoDB
+
+CREATE TABLE `AdicionalPtpocoCategoria` (`PaisCodigo`  smallint NOT NULL , `AdicionalTpocodId`  char(15) NOT NULL , `AdicionalTpoCodAdd`  char(15) NOT NULL , `AdicionalTpoCatRelaVigente`  char(1) NOT NULL , PRIMARY KEY(`PaisCodigo`, `AdicionalTpocodId`, `AdicionalTpoCodAdd`))  ENGINE=InnoDB
+CREATE INDEX `IADICIONALPTPOCOCATEGORIA1` ON `AdicionalPtpocoCategoria` (`PaisCodigo` ,`AdicionalTpoCodAdd` )
+
+CREATE TABLE `AdicionalTpoCoa` (`PaisCodigo`  smallint NOT NULL , `AdicionalTpoCodAdd`  char(15) NOT NULL , `AdicionalCodAddAbv`  char(15) NOT NULL , `AdicionalCodAddTxt`  char(45) NOT NULL , `AdicionalCodAddTipoValor`  smallint NOT NULL , `AdicionalCodAddExpRegular`  char(100) NOT NULL , `AdicionalCodAddVigente`  char(1) NOT NULL , PRIMARY KEY(`PaisCodigo`, `AdicionalTpoCodAdd`))  ENGINE=InnoDB
+
+CREATE TABLE `AdicionalPTpoCo` (`PaisCodigo`  smallint NOT NULL , `AdicionalTpocodId`  char(15) NOT NULL , `AdicionalTpocodAbv`  char(15) NOT NULL , `AdicionalTpocodTxt`  char(45) NOT NULL , `AdicionalTpocodReqValores`  smallint NOT NULL , `AdicionalTpocodCategoriaCombo`  BOOL NOT NULL , `AdicionalTpocodVigente`  char(1) NOT NULL , PRIMARY KEY(`PaisCodigo`, `AdicionalTpocodId`))  ENGINE=InnoDB
+
+CREATE TABLE `EntidadServicio` (`PaisCodigo`  smallint NOT NULL , `EntidadNombre`  char(5) NOT NULL , `ServicioNombre`  char(50) NOT NULL , `ServicioDescripcion`  char(255) NOT NULL , `ServicioConfiguracionRequiere`  BOOL NOT NULL , `ServicioLocationHost`  varchar(1000) NOT NULL , `ServicioLocationPuerto`  mediumint NOT NULL , `ServicioLocationBaseURL`  varchar(1000) NOT NULL , `ServicioLocationSecure`  smallint NOT NULL , `ServicioLocationAutenticacion`  smallint NOT NULL , `ServicioLocationAutenMetodo`  smallint NOT NULL , `ServicioLocationUsuario`  char(50) NOT NULL , `ServicioLocationPassword`  char(50) NOT NULL , `ServicioLocationRealm`  char(50) NOT NULL , `ServicioLocationTimeOut`  mediumint NOT NULL , `ServicioToken`  varchar(2048) NOT NULL , `ServicioTokenSign`  varchar(1024) NOT NULL , `ServicioTokenFechaGeneracion`  datetime NOT NULL , `ServicioTokenFechaExpiracion`  datetime NOT NULL , PRIMARY KEY(`PaisCodigo`, `EntidadNombre`, `ServicioNombre`))  ENGINE=InnoDB
+
+CREATE TABLE `Entidad` (`PaisCodigo`  smallint NOT NULL , `EntidadNombre`  char(5) NOT NULL , `EntidadCertificado`  LONGBLOB NOT NULL , `EntidadCertificadoExtension`  char(5) NOT NULL , `EntidadCertificadoFechaVenc`  date NOT NULL , `EntidadConfiguracion`  varchar(4096) NOT NULL , `EntidadConfiguracionFormato`  smallint NOT NULL , `EntidadErroresMostrar`  MEDIUMTEXT NOT NULL , PRIMARY KEY(`PaisCodigo`, `EntidadNombre`))  ENGINE=InnoDB
+
+CREATE TABLE `PerfilImpoAFIPJurisdiccion` (`PaisCodigo`  smallint NOT NULL , `AFIPTiposIVACodigo`  smallint NOT NULL , `PerfilImpoAFIPTpoIIBB`  char(1) NOT NULL , `PerfilImpoAFIPImpcliId`  smallint NOT NULL , `PerfilImpoAFIPJurisdiccionId`  smallint NOT NULL , PRIMARY KEY(`PaisCodigo`, `AFIPTiposIVACodigo`, `PerfilImpoAFIPTpoIIBB`, `PerfilImpoAFIPImpcliId`, `PerfilImpoAFIPJurisdiccionId`))  ENGINE=InnoDB
+CREATE INDEX `IPERFILIMPOAFIPJURISDICCION2` ON `PerfilImpoAFIPJurisdiccion` (`PerfilImpoAFIPJurisdiccionId` )
+
+CREATE TABLE `PerfilImpoAFIP` (`PaisCodigo`  smallint NOT NULL , `AFIPTiposIVACodigo`  smallint NOT NULL , `PerfilImpoAFIPTpoIIBB`  char(1) NOT NULL , `PerfilImpoAFIPImpcliId`  smallint NOT NULL , `PerfilImpoAFIPTodasProvincias`  BOOL NOT NULL , `PerfilImpoAFIPActivo`  BOOL NOT NULL , PRIMARY KEY(`PaisCodigo`, `AFIPTiposIVACodigo`, `PerfilImpoAFIPTpoIIBB`, `PerfilImpoAFIPImpcliId`))  ENGINE=InnoDB
+CREATE INDEX `IPERFILIMPOAFIP2` ON `PerfilImpoAFIP` (`PerfilImpoAFIPImpcliId` )
+
+CREATE TABLE `AFIPTiposIVA` (`PaisCodigo`  smallint NOT NULL , `AFIPTiposIVACodigo`  smallint NOT NULL , `AFIPTiposIVADescripcion`  char(60) NOT NULL , `AFIPTiposIVATRUCK`  smallint NOT NULL , PRIMARY KEY(`PaisCodigo`, `AFIPTiposIVACodigo`))  ENGINE=InnoDB
+
+CREATE TABLE `ClienteBloqueadoTmp` (`CliBloqTmpWorkStation`  char(60) NOT NULL , `CliBloqTmpPaisCodigo`  smallint NOT NULL , `CliBloqTmpClienteId`  bigint NOT NULL , `CliBloqTmpClienteNombre`  char(60) NOT NULL , `CliBloqTmpFechaAlta`  datetime NOT NULL , `CliBloqTmpUsuarioAlta`  char(20) NOT NULL , `CliBloqTmpPBaCId`  bigint NOT NULL , `CliBLoqTmpBloqueoTruck`  char(1) NOT NULL , PRIMARY KEY(`CliBloqTmpWorkStation`, `CliBloqTmpPaisCodigo`, `CliBloqTmpClienteId`))  ENGINE=InnoDB
+
+CREATE TABLE `AlcoholLicenciaLocalidad` (`AlcoholLicenciaPaisId`  smallint NOT NULL , `AlcoholLicenciaDeptoId`  smallint NOT NULL , `AlcoholLicenciaLocalidadId`  char(15) NOT NULL , PRIMARY KEY(`AlcoholLicenciaPaisId`, `AlcoholLicenciaDeptoId`, `AlcoholLicenciaLocalidadId`))  ENGINE=InnoDB
+
+CREATE TABLE `AlcoholLicenciaDepartamento` (`AlcoholLicenciaPaisId`  smallint NOT NULL , `AlcoholLicenciaDeptoId`  smallint NOT NULL , `AlcoholLicenciaDeptoRequiere`  BOOL NOT NULL , PRIMARY KEY(`AlcoholLicenciaPaisId`, `AlcoholLicenciaDeptoId`))  ENGINE=InnoDB
+
+CREATE TABLE `AlcoholLicencia` (`AlcoholLicenciaPaisId`  smallint NOT NULL , `AlcoholLicenciaPaisRequiere`  char(1) NOT NULL , `AlcoholLicenciaUsuarioId`  char(120) NOT NULL , `AlcoholLicenciaFechaCambio`  datetime NOT NULL , PRIMARY KEY(`AlcoholLicenciaPaisId`))  ENGINE=InnoDB
+
+CREATE TABLE `LogProcesoActiva` (`LogProcesoActivaNombre`  char(60) NOT NULL , `LogProcesoActivaDescripcion`  char(255) NOT NULL , `LogProcesoActivaActivo`  char(1) NOT NULL , `LogProcesoActivaUltimoCambio`  datetime NOT NULL , PRIMARY KEY(`LogProcesoActivaNombre`))  ENGINE=InnoDB
+
+CREATE TABLE `ClienteSolicitudAdjunto` (`PBaCID`  bigint NOT NULL , `ClienteSolAdjTipo`  smallint NOT NULL , `ClienteSolAdjTrnNro`  int NOT NULL , `ClienteSolAdjCliId`  mediumint NOT NULL , `ClienteSolAdjArchivo`  LONGBLOB NOT NULL , `ClienteSolAdjNombre`  char(80) NOT NULL , `ClienteSolAdjExtension`  char(5) NOT NULL , `ClienteSolAdjRevisionUsuario`  char(20) NOT NULL , `ClienteSolAdjRevisionFecha`  datetime NOT NULL , `ClienteSolAdjEstado`  char(1) NOT NULL , `ClienteSolAdjObservacion`  varchar(1024) NOT NULL , PRIMARY KEY(`PBaCID`, `ClienteSolAdjTipo`))  ENGINE=InnoDB
+CREATE INDEX `UCLIENTESOLICITUDADJUNTOBUSCA` ON `ClienteSolicitudAdjunto` (`ClienteSolAdjCliId` ,`PBaCID` )
+
+CREATE TABLE `ClienteAdjunto` (`ClienteAdjuntoEmpId`  smallint NOT NULL , `ClienteAdjuntoCliId`  mediumint NOT NULL , `ClienteAdjuntoTipo`  smallint NOT NULL , `ClienteAdjuntoVersion`  smallint NOT NULL , `ClienteAdjuntoSolicitudOrigen`  int NOT NULL , `ClienteAdjuntoArchivo`  LONGBLOB NOT NULL , `ClienteAdjuntoNombre`  char(80) NOT NULL , `ClienteAdjuntoExtension`  char(5) NOT NULL , `ClienteAdjuntoAltaUsuario`  char(20) NOT NULL , `ClienteAdjuntoAltaFecha`  datetime NOT NULL , `ClienteAdjuntoRevisionUsuario`  char(20) NOT NULL , `ClienteAdjuntoRevisionFecha`  datetime NOT NULL , `ClienteAdjuntoVigente`  char(1) NOT NULL , PRIMARY KEY(`ClienteAdjuntoEmpId`, `ClienteAdjuntoCliId`, `ClienteAdjuntoTipo`, `ClienteAdjuntoVersion`))  ENGINE=InnoDB
+CREATE INDEX `UCLIENTEADJUNTO` ON `ClienteAdjunto` (`ClienteAdjuntoEmpId` ,`ClienteAdjuntoCliId` ,`ClienteAdjuntoVigente` )
+
+CREATE TABLE `ProcesoPaso` (`ProcesoId`  bigint NOT NULL , `ProcesoPasoId`  smallint NOT NULL , `ProcesoPasoInicio`  datetime NOT NULL , `ProcesoPasoDescripcion`  varchar(256) NOT NULL , `ProcesoPasoFin`  datetime NOT NULL , `ProcesoPasoConError`  BOOL NOT NULL , `ProcesoPasoErrores`  MEDIUMTEXT NOT NULL , PRIMARY KEY(`ProcesoId`, `ProcesoPasoId`))  ENGINE=InnoDB
+
+CREATE TABLE `Proceso` (`ProcesoId`  bigint NOT NULL  AUTO_INCREMENT, `ProcesoKey`  char(100) NOT NULL , `ProcesoKeyDescripcion`  char(100) NOT NULL , `ProcesoInicio`  datetime NOT NULL , `ProcesoStatus`  char(3) NOT NULL , `ProcesoStatusActualizacion`  datetime NOT NULL , `ProcesoFin`  datetime NOT NULL , `ProcesoConError`  BOOL NOT NULL , `ProcesoUsuarioNombre`  char(50) NOT NULL , `ProcesoWrkStn`  char(20) NOT NULL , `ProcesoPermiteCancel`  BOOL NOT NULL , `ProcesoDato`  MEDIUMTEXT , `ProcesoUltimoPaso`  smallint NOT NULL , PRIMARY KEY(`ProcesoId`))  ENGINE=InnoDB
+CREATE INDEX `UPROCESOKEY` ON `Proceso` (`ProcesoUsuarioNombre` ,`ProcesoKey` )
+CREATE INDEX `UPROCESOUSUARIO` ON `Proceso` (`ProcesoUsuarioNombre` ,`ProcesoId` )
+CREATE INDEX `UPROCESOFECHA` ON `Proceso` (`ProcesoInicio` ,`ProcesoKey` )
+
+CREATE TABLE `LogProceso` (`LogId`  bigint NOT NULL  AUTO_INCREMENT, `LogFecha`  datetime NOT NULL , `LogProceso`  char(128) NOT NULL , `LogTipo`  char(1) NOT NULL , `LogTexto`  varchar(256) NOT NULL , `LogContexto`  varchar(2048) NOT NULL , PRIMARY KEY(`LogId`))  ENGINE=InnoDB
+CREATE INDEX `ULOGPROCESOWW` ON `LogProceso` (`LogFecha` ,`LogProceso` )
+
+CREATE TABLE `Equivalencia` (`EquivalenciaId`  int NOT NULL  AUTO_INCREMENT, `EmpId`  smallint NOT NULL , `EquivalenciaAmbito`  char(3) NOT NULL , `EquivalenciaOrigen`  char(80) NOT NULL , `EquivalenciaRemplazo`  char(45) NOT NULL , PRIMARY KEY(`EquivalenciaId`))  ENGINE=InnoDB
+CREATE UNIQUE INDEX `UEQUIVALENCIAUNIQUE` ON `Equivalencia` (`EmpId` ,`EquivalenciaAmbito` ,`EquivalenciaOrigen` )
+
+CREATE TABLE `SubRegionAlcohol` (`EmpId`  smallint NOT NULL , `SubRegionId`  smallint NOT NULL , `SubRegionAlcoholObligatorio`  char(1) NOT NULL , PRIMARY KEY(`EmpId`, `SubRegionId`))  ENGINE=InnoDB
+
+CREATE TABLE `ClienteSolicitudTerrDiaVisita` (`PBaCID`  bigint NOT NULL , `PBaCTrrCategoria`  char(3) NOT NULL , `PBaCTrrId`  mediumint NOT NULL , `PBaCTrrDia`  smallint NOT NULL , `PBacTrrDiaTpoFrec`  char(4) NOT NULL , `PBacTrrDiaCliVisAnt`  bigint NOT NULL , PRIMARY KEY(`PBaCID`, `PBaCTrrCategoria`, `PBaCTrrId`, `PBaCTrrDia`))  ENGINE=InnoDB
+
+CREATE TABLE `ClienteSolicitudTerr` (`PBaCID`  bigint NOT NULL , `PBaCTrrCategoria`  char(3) NOT NULL , `PBaCTrrId`  mediumint NOT NULL , `PBaCTrrCentroDespacho`  char(3) NOT NULL , `PBaCTrrCanalVenta`  smallint NOT NULL , `PBaCTrrVisitaOrden`  smallint NOT NULL , `PBaCTrrVisitaFrecuencia`  smallint NOT NULL , `PBaCZonId`  char(4) , `PBaCRegId`  smallint , PRIMARY KEY(`PBaCID`, `PBaCTrrCategoria`, `PBaCTrrId`))  ENGINE=InnoDB
+
+CREATE TABLE `ClienteSolicitud` (`PBaCID`  bigint NOT NULL  AUTO_INCREMENT, `PBaCTrnNro`  int NOT NULL , `PBaCTipTrn`  char(3) NOT NULL , `PBaCCliNom`  char(45) NOT NULL , `PBaCCliAbv`  char(15) NOT NULL , `PBaCCliDom`  char(45) NOT NULL , `DptId`  smallint NOT NULL , `PBaCCodPst`  char(10) NOT NULL , `Lcdid`  char(15) NOT NULL , `PBaCNroTel`  char(15) NOT NULL , `PBaCFchApe`  date , `PBaCFchBaj`  date , `PBaCCodRUC`  char(20) NOT NULL , `PBaCTipoNegocio`  char(40) NOT NULL , `MTVEId`  smallint , `PBacFlgAutV`  char(1) , `PBaCCodLic`  char(15) , `PBaCFchLic`  date , `PBaCFchUltA`  date , `PBaCHorUltA`  char(8) , `CliIdPrf`  char(15) NOT NULL , `PBaCImpCliI`  smallint NOT NULL , `PBacNroDom`  char(7) NOT NULL , `PBacDptDom`  char(7) NOT NULL , `PBaCNomFnt`  char(30) , `PBacNomPrp`  char(45) , `CliDocTpo`  smallint NOT NULL , `PBaCCodMail`  char(30) NOT NULL , `PBaCCliAdy`  mediumint , `PBaCCooX`  char(45) , `PBaCCooY`  char(45) , `PBaCTpoIngB`  char(1) , `PBaCNroBru`  char(15) , `PBaCCodCmp`  char(45) , `PBaCMsgId`  smallint , `PBaCMsgFac`  char(15) , `PBaCCzaTpoI`  smallint , `PBaCIdCbr`  char(15) , `PBaCFlgExc`  char(1) , `PBaCTpoVin`  char(3) , `PBaCIdFaMov`  smallint , `PBaCIdSoMov`  smallint , `PBaCFchAniv`  date , `PBacFlgPagD`  char(1) , `PBacValTope`  smallint , `PBACTIPOCON`  char(1) , `PBaCFchIniR`  date , `PBaCCodAnt`  char(10) , `PBaCMaxDias`  smallint , `PBaCNroJur`  char(15) , `PBaCFlgIcc`  char(1) , `PBaCNroTck`  char(10) , `PBaCIdGpoCo`  mediumint , `PBaCTpoInfC`  smallint , `FmapgoId`  smallint , `PBaCIdPzo`  smallint , `PBaCCrdVal`  bigint , `PBaCFchModC`  date , `PBaCCplCval`  NUMERIC(13,2) , `PBaCCplFlgC`  smallint , `PBaCFlgCtc`  char(1) , `PBaCSdoCtc`  NUMERIC(13,2) , `PBaCSdoDoc`  NUMERIC(13,2) , `PBaCTotDeb`  NUMERIC(13,2) , `PBaCTotCre`  NUMERIC(13,2) , `PBaCFchFUlt`  date , `PBaCFchPUlt`  date , `PBaCValMayS`  NUMERIC(13,2) , `PBaCSts`  smallint , `PBaCTpoCon`  smallint , `ZonaEntregaDepCod`  smallint , `PBaCTxtGtia`  char(45) , `PBaCTotGtia`  NUMERIC(13,2) , `PaisCodigo`  smallint NOT NULL , `PBaCEmpId`  smallint , `PBacTpoEmp`  char(1) , `PBaCCliId`  mediumint NOT NULL , `PBaCIdCtc`  mediumint , `PBaCRamId`  smallint , `PBaCCodAtn`  mediumint , `PBacFlgDesP`  char(1) , `PBacFlgPrm`  char(1) , `PBacTpoCndV`  mediumint , `PBaCTpoLprB`  smallint , `PBaCTpoLprM`  smallint , `PBacValPriA`  smallint , `PBacIdMonDf`  char(3) , `CliValCat`  char(3) , `PBacCliPotencial`  char(15) , `PBacFchUltV`  date , `PBaCFchVigC`  date , `PBaCTpoCom`  smallint , `PBaCFlgRem`  char(1) , `PBaCFlgCteE`  char(1) , `PBaCPrjPer`  NUMERIC(6,2) , `PBaCFlgEgc`  char(1) , `PBaCUltEgc`  smallint , `PBaCCodJur`  char(15) , `PBaCPerDesF`  date , `PBaCPerHasF`  date , `PBaCIbtDesF`  date , `PBaCIbtHasF`  date , `PBaCFlgSeg`  char(1) , `PBaCNImpInt`  char(15) , `PBaCVal1Clf`  mediumint , `PBaCVal2Clf`  mediumint , `PBaCVal3Clf`  mediumint , `PBaCIdBcoDf`  smallint , `PBaCNroPrv`  char(15) , `PBaCFlgCns`  char(1) , `PBaCTpoVnd`  char(1) , `PBaCFlgExp`  char(1) , `PBaCDocNro`  char(20) NOT NULL , `PBaCMaySFch`  date , `PBaCPrjIngB`  NUMERIC(6,2) , `PBaCTrnFechaEnvio`  datetime NOT NULL , `PBaCFechaUltimoCambio`  datetime NOT NULL , `PBaCFechaAlta`  date NOT NULL , `PBaCUsuarioAltaId`  char(20) , `PBaConfirmEmail`  BOOL NOT NULL , `PBaCAltaCompleta`  BOOL NOT NULL , `PBaCObservaciones`  varchar(100) , `PBaCTrnNroAgrupador`  int NOT NULL , `PBaCTipoOperacion`  char(3) , `PBaCTipoOperacionAgrupador`  char(3) NOT NULL , `PBaCSolicitudEstado`  char(3) , `PBaCDocumentosCheck`  char(1) NOT NULL , `PBaCUltimoMovimientoOK`  BOOL , `PBaCModificar`  char(1) NOT NULL , `PBaCAutorizar`  char(1) NOT NULL , `PBaCSemanaInicio`  smallint NOT NULL , `PBaCClienteReferencia`  mediumint , `PBaCDistribuidoresId`  char(80) , `PBaCBajaConformidad`  LONGBLOB , `PBaCBajaConformidadExtension`  char(5) NOT NULL , `PBaCSolReprocesadaId`  bigint , `PBaCSolReprocesadaTrnNroAgru`  int , `PBaCModoEnvioTruck`  char(1) NOT NULL , `PBaCClienteDatosAnterior`  TEXT , `PBaCClienteDatosAFIP`  MEDIUMTEXT , `PBaCIVAWSok`  BOOL NOT NULL , `PBaCLicenciaAlcoholPendiente`  char(1) NOT NULL , `PBaCLicenciaAlcoholConfirmada`  datetime NOT NULL , `PBaCLicenciaAlcoholOrigenPBaCI`  bigint NOT NULL , `PBaCOrigen`  char(100) NOT NULL , `PBaCOrigenId`  varchar(60) NOT NULL , `PBaCOrigenUsuario`  char(100) NOT NULL , `PBaCclienteB2B`  char(15) NOT NULL , `PBaCMDValida`  char(1) NOT NULL , `PBaCMDFechaValidacion`  datetime NOT NULL , PRIMARY KEY(`PBaCID`))  ENGINE=InnoDB
+CREATE INDEX `ICLIENTESOLICITUD1` ON `ClienteSolicitud` (`CliValCat` )
+CREATE INDEX `ICLIENTESOLICITUD2` ON `ClienteSolicitud` (`PaisCodigo` ,`ZonaEntregaDepCod` )
+CREATE INDEX `ICLIENTESOLICITUD3` ON `ClienteSolicitud` (`PaisCodigo` ,`MTVEId` )
+CREATE INDEX `ICLIENTESOLICITUD4` ON `ClienteSolicitud` (`FmapgoId` )
+CREATE INDEX `ICLIENTESOLICITUD5` ON `ClienteSolicitud` (`CliDocTpo` )
+CREATE INDEX `ICLIENTESOLICITUD6` ON `ClienteSolicitud` (`CliIdPrf` )
+CREATE INDEX `ICLIENTESOLICITUD7` ON `ClienteSolicitud` (`Lcdid` )
+CREATE INDEX `ICLIENTESOLICITUD8` ON `ClienteSolicitud` (`DptId` )
+CREATE INDEX `UCLIENTESOLICITUDNUMERO` ON `ClienteSolicitud` (`PaisCodigo` ,`PBaCTipTrn` ,`PBaCTrnNro` )
+CREATE INDEX `UCLIENTESOLICITUDAGRUPADOR` ON `ClienteSolicitud` (`PaisCodigo` ,`PBaCTrnNroAgrupador` ,`PBaCTrnNro` )
+CREATE INDEX `UCLIENTESOLICITUDCLIENTE` ON `ClienteSolicitud` (`PBaCTipTrn` ,`PBaCEmpId` ,`PBaCCliId` )
+CREATE INDEX `UCLIENTESOLICITUDESTADO` ON `ClienteSolicitud` (`PBaCSolicitudEstado` )
+CREATE INDEX `UCLIENTESOLICITUDEMPRESA` ON `ClienteSolicitud` (`PBaCEmpId` ,`PBaCCliId` )
+CREATE INDEX `UCLIENTESOLICITUDORIGEN` ON `ClienteSolicitud` (`PaisCodigo` ,`PBaCOrigen` ,`PBaCOrigenId` )
+
+CREATE TABLE `DepartamentoLocalidad` (`PaisCodigo`  smallint NOT NULL , `DeptoTruckId`  smallint NOT NULL , `LocalidadTruckId`  char(15) NOT NULL , `LocalidadDescripcion`  char(45) NOT NULL , `LocalidadInhabilitada`  BOOL , PRIMARY KEY(`PaisCodigo`, `DeptoTruckId`, `LocalidadTruckId`))  ENGINE=InnoDB
+CREATE INDEX `IDEPARTAMENTOLOCALIDAD1` ON `DepartamentoLocalidad` (`LocalidadTruckId` )
+CREATE INDEX `UDEPARTAMENTOLOCALIDADPAISDESC` ON `DepartamentoLocalidad` (`PaisCodigo` ,`DeptoTruckId` ,`LocalidadDescripcion` )
+
+CREATE TABLE `Departamento` (`PaisCodigo`  smallint NOT NULL , `DeptoTruckId`  smallint NOT NULL , `DeptoDescripcion`  char(45) NOT NULL , `DeptoTruckLocalidadDefault`  char(15) , `DeptoInhabilitado`  BOOL , PRIMARY KEY(`PaisCodigo`, `DeptoTruckId`))  ENGINE=InnoDB
+CREATE INDEX `IDEPARTAMENTO1` ON `Departamento` (`DeptoTruckId` )
+CREATE INDEX `UDEPARTAMENTOPAISDESCGOOGLE` ON `Departamento` (`PaisCodigo` ,`DeptoDescripcion` )
+
+CREATE TABLE `Auditoria` (`AuditoriaId`  bigint NOT NULL  AUTO_INCREMENT, `AuditoriaEntidad`  char(60) NOT NULL , `AuditoriaPK`  char(60) NOT NULL , `AuditoriaAccion`  char(3) NOT NULL , `AuditoriaUsuarioGUID`  char(40) NOT NULL , `AuditoriaUsuarioName`  char(30) NOT NULL , `AuditoriaFecha`  datetime NOT NULL , `AuditoriaDetalle`  varchar(500) NOT NULL , PRIMARY KEY(`AuditoriaId`))  ENGINE=InnoDB
+
+CREATE TABLE `UserRegion` (`UserGUID`  char(40) NOT NULL , `EmpId`  smallint NOT NULL , `RegId`  smallint NOT NULL , `UserNick`  char(30) NOT NULL , `UserApyNom`  char(100) NOT NULL , PRIMARY KEY(`UserGUID`, `EmpId`, `RegId`))  ENGINE=InnoDB
+CREATE INDEX `IUSERREGION1` ON `UserRegion` (`EmpId` ,`RegId` )
+
+CREATE TABLE `PCLLocDist` (`PaisCodigo`  smallint NOT NULL , `LOCDISLcdId`  char(15) NOT NULL , `LOCDISCliId`  mediumint NOT NULL , PRIMARY KEY(`PaisCodigo`, `LOCDISLcdId`, `LOCDISCliId`))  ENGINE=InnoDB
+
+CREATE TABLE `Parametros` (`PaisCodigo`  smallint NOT NULL , `ParametrosId`  mediumint NOT NULL , `ParametrosSec`  smallint NOT NULL , `ParametrosDesc`  char(100) NOT NULL , `ParametrosNum`  NUMERIC(17,4) , `ParametrosChar`  char(255) , `ParametrosVarChar`  varchar(1000) , `ParametrosDate`  date , `ParametrosDateTime`  datetime , `ParametrosChar01`  char(255) , `ParametrosChar02`  char(255) , `ParametrosChar03`  char(255) , `ParametrosChar04`  char(255) , `ParametrosGral`  BOOL NOT NULL , `ParametrosEncript`  BOOL NOT NULL , PRIMARY KEY(`PaisCodigo`, `ParametrosId`, `ParametrosSec`))  ENGINE=InnoDB
+
+CREATE TABLE `BandejaAutorizacion` (`IdAprobacion`  bigint NOT NULL , `BandejaAutFchRegistro`  datetime NOT NULL , `BaCTrnNro`  int NOT NULL , `BandejaAutTpoMovim`  char(2) NOT NULL , `BandejaAutNroTicket`  bigint NOT NULL , `BandejaAutRolAutoriz`  varchar(60) NOT NULL , `BandejaAutUserAccion`  varchar(60) , `BandejaAutFchAccion`  datetime , `BandejaAutAccion`  char(1) , PRIMARY KEY(`IdAprobacion`))  ENGINE=InnoDB
+
+CREATE TABLE `CodigosAdicionales` (`IdCodigo`  int NOT NULL , `CodAdicionalAbv`  char(45) NOT NULL , `CodAdicionalTxt`  varchar(100) NOT NULL , `CodAdicionalGpoInfo`  smallint NOT NULL , `CodAdicionalEstado`  char(1) NOT NULL , PRIMARY KEY(`IdCodigo`, `CodAdicionalAbv`))  ENGINE=InnoDB
+
+CREATE TABLE `PCLMaTeZo` (`PaisCodigo`  smallint NOT NULL , `MTVEId`  smallint NOT NULL , `MTVECanalCod`  smallint NOT NULL , `MTVESubCanalCod`  smallint NOT NULL , `MTVESegmentoCod`  smallint NOT NULL , `MTVEVendedorCat`  char(3) NOT NULL , `MTVENegocioTipo`  char(45) NOT NULL , `MTVEBuscaCercanoPor`  char(3) NOT NULL , `MTVERepartoEspecial`  smallint NOT NULL , `MTVEVisibleCombo`  char(1) NOT NULL , `MTVEVentasMasHabilitado`  BOOL NOT NULL , PRIMARY KEY(`PaisCodigo`, `MTVEId`))  ENGINE=InnoDB
+CREATE UNIQUE INDEX `IPCLMATEZO02` ON `PCLMaTeZo` (`PaisCodigo` ,`MTVESegmentoCod` ,`MTVECanalCod` ,`MTVESubCanalCod` )
+
+CREATE TABLE `PCLZonVis` (`PaisCodigo`  smallint NOT NULL , `ZonaVisitaCodigo`  smallint NOT NULL , `ZonaVisitaDescripcion`  char(45) NOT NULL , `ZonaVisitaPoligono`  GEOMETRY NOT NULL , `ZonaVisitaBlob`  LONGBLOB NOT NULL , `ZonaVisitaTipo`  char(1) NOT NULL , `ZonaVisitaTipoIdDist`  mediumint , `ZonaVisitaRegId`  smallint NOT NULL , `ZonaVisitaMinDist`  NUMERIC(11,4) NOT NULL , PRIMARY KEY(`PaisCodigo`, `ZonaVisitaCodigo`))  ENGINE=InnoDB
+CREATE INDEX `UPCLZONVIS01` ON `PCLZonVis` (`PaisCodigo` ,`ZonaVisitaRegId` )
+
+CREATE TABLE `PCLZonEnt` (`PaisCodigo`  smallint NOT NULL , `ZonaEntregaDepCod`  smallint NOT NULL , `ZonaEntregaDepDsc`  char(45) NOT NULL , `ZonaEntregaPoligono`  GEOMETRY NOT NULL , `ZonaEntregaBlob`  LONGBLOB NOT NULL , `ZonaEntregaCliAdy`  mediumint NOT NULL , `ZonaEntregaMinDist`  NUMERIC(11,4) NOT NULL , PRIMARY KEY(`PaisCodigo`, `ZonaEntregaDepCod`))  ENGINE=InnoDB
+
+CREATE TABLE `PCLCodAte` (`PaisCodigo`  smallint NOT NULL , `AtencionCodigo`  smallint NOT NULL , `AtencionDesc`  char(30) NOT NULL , PRIMARY KEY(`PaisCodigo`, `AtencionCodigo`))  ENGINE=InnoDB
+
+CREATE TABLE `PCLValDef` (`PaisCodigo`  smallint NOT NULL , `ValorDefaultCampo`  char(30) NOT NULL , `ValorDefaultObligatorio`  BOOL NOT NULL , `ValorDefaultTiene`  BOOL NOT NULL , `ValorDefaultTipoDato`  char(1) NOT NULL , `ValorDefaultChar`  char(45) , `ValorDefaultNum`  NUMERIC(13,2) , `ValorDefaultDate`  date , `ValorDefaultDateTime`  datetime , `ValorDefaultDescripcion`  char(80) , `ValorDefaultDescripAmpliada`  varchar(200) , `ValorDefaultExpresionRegular`  varchar(128) NOT NULL , `ValorDefaultAltaEditable`  BOOL NOT NULL , `ValorDefaultModificaEditable`  BOOL NOT NULL , PRIMARY KEY(`PaisCodigo`, `ValorDefaultCampo`))  ENGINE=InnoDB
+
+CREATE TABLE `PCLTipoVta` (`PaisCodigo`  smallint NOT NULL , `TipoVtaFormaPago`  smallint NOT NULL , `TipoVtaDescPago`  char(30) NOT NULL , PRIMARY KEY(`PaisCodigo`, `TipoVtaFormaPago`))  ENGINE=InnoDB
+
+CREATE TABLE `PCLPais` (`PaisCodigo`  smallint NOT NULL , `PaisNombre`  char(50) NOT NULL , `PaisLDAP`  char(2) NOT NULL , `PaisEmpresaId`  smallint NOT NULL , `PaisEsquema`  char(4) NOT NULL , PRIMARY KEY(`PaisCodigo`))  ENGINE=InnoDB
+CREATE INDEX `UPCLPAISLDAP` ON `PCLPais` (`PaisLDAP` )
+
+ALTER TABLE `PCLTipoVta` ADD CONSTRAINT `IPCLTIPOVTA01` FOREIGN KEY (`PaisCodigo`) REFERENCES `PCLPais` (`PaisCodigo`)
+
+ALTER TABLE `PCLValDef` ADD CONSTRAINT `IPCLVALDEF01` FOREIGN KEY (`PaisCodigo`) REFERENCES `PCLPais` (`PaisCodigo`)
+
+ALTER TABLE `PCLCodAte` ADD CONSTRAINT `IPCLCODATE01` FOREIGN KEY (`PaisCodigo`) REFERENCES `PCLPais` (`PaisCodigo`)
+
+ALTER TABLE `PCLZonEnt` ADD CONSTRAINT `IPCLZONENT01` FOREIGN KEY (`PaisCodigo`) REFERENCES `PCLPais` (`PaisCodigo`)
+
+ALTER TABLE `PCLZonVis` ADD CONSTRAINT `IZONASVISITA1` FOREIGN KEY (`PaisCodigo`) REFERENCES `PCLPais` (`PaisCodigo`)
+
+ALTER TABLE `PCLMaTeZo` ADD CONSTRAINT `IPCLMATEZO01` FOREIGN KEY (`PaisCodigo`) REFERENCES `PCLPais` (`PaisCodigo`)
+
+ALTER TABLE `Parametros` ADD CONSTRAINT `IPARAMETROS4` FOREIGN KEY (`PaisCodigo`) REFERENCES `PCLPais` (`PaisCodigo`)
+
+ALTER TABLE `PCLLocDist` ADD CONSTRAINT `ILOCALIDADESDISTRIBUIDORES1` FOREIGN KEY (`PaisCodigo`) REFERENCES `PCLPais` (`PaisCodigo`)
+
+ALTER TABLE `Departamento` ADD CONSTRAINT `IDEPARTAMENTO2` FOREIGN KEY (`PaisCodigo`) REFERENCES `PCLPais` (`PaisCodigo`)
+
+ALTER TABLE `DepartamentoLocalidad` ADD CONSTRAINT `IDEPARTAMENTOLOCALIDAD2` FOREIGN KEY (`PaisCodigo`, `DeptoTruckId`) REFERENCES `Departamento` (`PaisCodigo`, `DeptoTruckId`)
+
+ALTER TABLE `ClienteSolicitud` ADD CONSTRAINT `GX_002L0001` FOREIGN KEY (`PaisCodigo`) REFERENCES `PCLPais` (`PaisCodigo`)
+ALTER TABLE `ClienteSolicitud` ADD CONSTRAINT `ICLIENTESOLICITUD3` FOREIGN KEY (`PaisCodigo`, `MTVEId`) REFERENCES `PCLMaTeZo` (`PaisCodigo`, `MTVEId`)
+ALTER TABLE `ClienteSolicitud` ADD CONSTRAINT `ICLIENTESOLICITUD2` FOREIGN KEY (`PaisCodigo`, `ZonaEntregaDepCod`) REFERENCES `PCLZonEnt` (`PaisCodigo`, `ZonaEntregaDepCod`)
+
+ALTER TABLE `ClienteSolicitudTerr` ADD CONSTRAINT `ICLIENTESOLICITUDTERR1` FOREIGN KEY (`PBaCID`) REFERENCES `ClienteSolicitud` (`PBaCID`)
+
+ALTER TABLE `ClienteSolicitudTerrDiaVisita` ADD CONSTRAINT `ICLIENTESOLICITUDTERRDIAVISIT1` FOREIGN KEY (`PBaCID`, `PBaCTrrCategoria`, `PBaCTrrId`) REFERENCES `ClienteSolicitudTerr` (`PBaCID`, `PBaCTrrCategoria`, `PBaCTrrId`)
+
+ALTER TABLE `ProcesoPaso` ADD CONSTRAINT `IPROCESOPASO1` FOREIGN KEY (`ProcesoId`) REFERENCES `Proceso` (`ProcesoId`)
+
+ALTER TABLE `ClienteSolicitudAdjunto` ADD CONSTRAINT `ICLIENTESOLICITUDADJUNTO1` FOREIGN KEY (`PBaCID`) REFERENCES `ClienteSolicitud` (`PBaCID`)
+
+ALTER TABLE `AlcoholLicencia` ADD CONSTRAINT `IALCOHOLLICENCIA` FOREIGN KEY (`AlcoholLicenciaPaisId`) REFERENCES `PCLPais` (`PaisCodigo`)
+
+ALTER TABLE `AlcoholLicenciaDepartamento` ADD CONSTRAINT `IALCOHOLLICENCIADEPARTAMENTO1` FOREIGN KEY (`AlcoholLicenciaPaisId`) REFERENCES `AlcoholLicencia` (`AlcoholLicenciaPaisId`)
+ALTER TABLE `AlcoholLicenciaDepartamento` ADD CONSTRAINT `IALCOHOLLICENCIADEPARTAMENTO` FOREIGN KEY (`AlcoholLicenciaPaisId`, `AlcoholLicenciaDeptoId`) REFERENCES `Departamento` (`PaisCodigo`, `DeptoTruckId`)
+
+ALTER TABLE `AlcoholLicenciaLocalidad` ADD CONSTRAINT `IALCOHOLLICENCIALOCALIDAD1` FOREIGN KEY (`AlcoholLicenciaPaisId`, `AlcoholLicenciaDeptoId`) REFERENCES `AlcoholLicenciaDepartamento` (`AlcoholLicenciaPaisId`, `AlcoholLicenciaDeptoId`)
+ALTER TABLE `AlcoholLicenciaLocalidad` ADD CONSTRAINT `IALCOHOLLICENCIALOCALIDAD` FOREIGN KEY (`AlcoholLicenciaPaisId`, `AlcoholLicenciaDeptoId`, `AlcoholLicenciaLocalidadId`) REFERENCES `DepartamentoLocalidad` (`PaisCodigo`, `DeptoTruckId`, `LocalidadTruckId`)
+
+ALTER TABLE `AFIPTiposIVA` ADD CONSTRAINT `IAFIPTIPOSIVA1` FOREIGN KEY (`PaisCodigo`) REFERENCES `PCLPais` (`PaisCodigo`)
+
+ALTER TABLE `PerfilImpoAFIP` ADD CONSTRAINT `IPERFILIMPOAFIP1` FOREIGN KEY (`PaisCodigo`, `AFIPTiposIVACodigo`) REFERENCES `AFIPTiposIVA` (`PaisCodigo`, `AFIPTiposIVACodigo`)
+
+ALTER TABLE `PerfilImpoAFIPJurisdiccion` ADD CONSTRAINT `IPERFILIMPOAFIPJURISDICCION1` FOREIGN KEY (`PaisCodigo`, `AFIPTiposIVACodigo`, `PerfilImpoAFIPTpoIIBB`, `PerfilImpoAFIPImpcliId`) REFERENCES `PerfilImpoAFIP` (`PaisCodigo`, `AFIPTiposIVACodigo`, `PerfilImpoAFIPTpoIIBB`, `PerfilImpoAFIPImpcliId`)
+
+ALTER TABLE `Entidad` ADD CONSTRAINT `IENTIDAD1` FOREIGN KEY (`PaisCodigo`) REFERENCES `PCLPais` (`PaisCodigo`)
+
+ALTER TABLE `EntidadServicio` ADD CONSTRAINT `IENTIDADSERVICIO1` FOREIGN KEY (`PaisCodigo`, `EntidadNombre`) REFERENCES `Entidad` (`PaisCodigo`, `EntidadNombre`)
+
+ALTER TABLE `AdicionalPTpoCo` ADD CONSTRAINT `IADICIONALPTPOCO1` FOREIGN KEY (`PaisCodigo`) REFERENCES `PCLPais` (`PaisCodigo`)
+
+ALTER TABLE `AdicionalTpoCoa` ADD CONSTRAINT `IADICIONALTPOCOA1` FOREIGN KEY (`PaisCodigo`) REFERENCES `PCLPais` (`PaisCodigo`)
+
+ALTER TABLE `AdicionalPtpocoCategoria` ADD CONSTRAINT `IADICIONALPTPOCOCATEGORIA2` FOREIGN KEY (`PaisCodigo`, `AdicionalTpocodId`) REFERENCES `AdicionalPTpoCo` (`PaisCodigo`, `AdicionalTpocodId`)
+ALTER TABLE `AdicionalPtpocoCategoria` ADD CONSTRAINT `IADICIONALPTPOCOCATEGORIA1` FOREIGN KEY (`PaisCodigo`, `AdicionalTpoCodAdd`) REFERENCES `AdicionalTpoCoa` (`PaisCodigo`, `AdicionalTpoCodAdd`)
+
+ALTER TABLE `ClienteSolicitudCodAdicional` ADD CONSTRAINT `ICLIENTESOLICITUDCODADICIONAL1` FOREIGN KEY (`PBaCID`) REFERENCES `ClienteSolicitud` (`PBaCID`)
+
+ALTER TABLE `ComportamientoRol` ADD CONSTRAINT `ICOMPORTAMIENTOROL1` FOREIGN KEY (`PaisCodigo`) REFERENCES `PCLPais` (`PaisCodigo`)
+
+ALTER TABLE `PerfilImpositivoConfig` ADD CONSTRAINT `GX_003H0001` FOREIGN KEY (`PaisCodigo`) REFERENCES `PCLPais` (`PaisCodigo`)
+ALTER TABLE `PerfilImpositivoConfig` ADD CONSTRAINT `IPERFILIMPOSITIVOCONFIGURACIO1` FOREIGN KEY (`PaisCodigo`, `AFIPTiposIVACodigo`) REFERENCES `AFIPTiposIVA` (`PaisCodigo`, `AFIPTiposIVACodigo`)
+
+ALTER TABLE `PerfilImpositivoConfigJurisdic` ADD CONSTRAINT `IPERFILIMPOSITIVOCONFIGURACIO7` FOREIGN KEY (`PICID`) REFERENCES `PerfilImpositivoConfig` (`PICID`)
+
